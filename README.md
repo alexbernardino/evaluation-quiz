@@ -1,21 +1,21 @@
 # Evaluation Quiz
 
-A separate, static formative quiz matching the visual style of the KNN, regression and regularization quizzes. Twenty-four questions provide immediate feedback, suggested experiments or reflections, progress, a question map, section scores, answer review and restart. No backend or external dependencies.
+A separate, static formative quiz matching the visual style of the KNN, regression and regularization quizzes. Twenty-four questions provide immediate feedback, conceptual reflections, progress, a question map, section scores, answer review and restart. No backend or external dependencies.
 
 ## Lecture alignment
 
-Source: the supplied `0_Machine_Learning_Slides.pdf`, Evaluation & Generalization chapter, printed slides 113–145 (PDF pages 114–146). Each question records its printed slide references in `questions.js`. The PDF is not copied into the public repository.
+Source: the supplied `0_Machine_Learning_Slides.pdf`, Evaluation & Generalization chapter. The PDF is not copied into the public repository.
 
 | Questions | Section | Coverage |
 |---|---|---|
 | 1–6 | Evaluation basics | Squared loss; empirical and population risk; training optimism; population mismatch; dataset roles; generalization gap |
 | 7–12 | Bias & variance | Repeated training; pointwise bias; predictor variance; decomposition; degree and overfitting; irreducible noise |
-| 13–18 | Test-score uncertainty | Fixed-predictor evaluation; loss-based SE; test size; repetitions vs. sample size; dependent observations; risk intervals |
+| 13–18 | Test-score uncertainty | Fixed-predictor evaluation; loss-based SE; test size; unbiased test risk; dependent observations; explicit population-risk calculation |
 | 19–24 | Model selection | Parameters vs. hyperparameters; test reuse; weighted CV; preprocessing leakage; nested CV; refitting after assessment |
 
-Questions are answerable from the chapter and [Evaluation Interactive](https://alexbernardino.github.io/evaluation-interactive/). “Try it” activities use existing demo controls. “Reflect” activities are lecture-based, including CV and nested CV, which the demo does not implement. Q18 uses the demo's approximate interval to apply the lecture's standard-error formula; it is explicitly approximate, not a guarantee. No precision/recall, kernel or regularization-specific questions are included.
+Questions are self-contained and based on the Evaluation & Generalization chapter. All numerical assumptions are stated in the questions. Feedback provides explanations and conceptual reflections, with no dependency on external demonstrations, interface controls or plots. No precision/recall, kernel or regularization-specific questions are included.
 
-The demo estimates finite-ensemble bias and variance; fixed noisy test MSE need not equal the expected decomposition. Fresh independent simulation datasets are not overlapping CV folds. These distinctions are preserved in the explanations.
+Bias and predictor variance are distinguished from sampling uncertainty of test MSE. Independent evaluation samples are distinguished from overlapping cross-validation folds.
 
 ## Test locally
 
@@ -37,7 +37,7 @@ The build writes a GitHub Pages-ready `dist/` folder, including a UTC build time
 
 ## Editing questions
 
-Edit **`questions.js`**. Each item has a unique id, section, category, prompt, four options, zero-based answer index (0–3), explanation, activity type, activity and lecture slide references. Run `npm test` after edits. Update the structural tests and displayed question-count text if you change the quiz length or section sizes.
+Edit **`questions.js`**. Each item has a unique id, section, category, prompt, four options, zero-based answer index (0–3), explanation, activity type and activity. Run `npm test` after edits. Update the structural tests and displayed question-count text if you change the quiz length or section sizes.
 
 Answers lock after first selection; returning to a question does not change the score. Students can jump between questions and see results after answering all of them. Restarting begins a fresh attempt. Progress is held only in memory and resets on reload. No names, scores, cookies, analytics or browser storage are collected. Correct answers ship with the browser code: this is formative practice, not a secure examination system.
 
