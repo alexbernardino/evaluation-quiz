@@ -3,6 +3,14 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {questions,sections} from '../questions.js';
 import {createAnswers,choose,stats} from '../state.js';
+test('statistical assumptions and uncertainty distinctions remain explicit',()=>{
+ const q=id=>questions.find(q=>q.id===id);
+ assert.match(q('decomposition').prompt,/conditional mean zero.*independent of training/);
+ assert.match(q('se-calculation').prompt,/independent of fitting and selection.*IID/);
+ assert.match(q('repetitions').options[q('repetitions').answer],/evaluation precision without changing the predictor/);
+ assert.match(q('dependence').explanation,/fold-score SD.*not generally a valid standard error/);
+ assert.match(q('nested').explanation,/outer training size/);
+});
 test('24 unique questions in four balanced sections',()=>{assert.equal(questions.length,24);assert.equal(new Set(questions.map(q=>q.id)).size,24);assert.equal(sections.length,4);for(const s of sections)assert.equal(questions.filter(q=>q.section===s).length,6);});
 test('each question has four distinct options, one valid answer and feedback',()=>{for(const q of questions){assert.equal(q.options.length,4);assert.equal(new Set(q.options).size,4);assert.ok(Number.isInteger(q.answer)&&q.answer>=0&&q.answer<4);assert.ok(q.prompt.length>20&&q.explanation.length>50&&q.activity.length>30);assert.ok(sections.includes(q.section));assert.equal(q.activityType,'Reflect');assert.equal(Object.hasOwn(q,'slides'),false);}});
 test('correct answers are balanced across positions',()=>assert.deepEqual([0,1,2,3].map(a=>questions.filter(q=>q.answer===a).length),[6,6,6,6]));

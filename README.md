@@ -10,12 +10,14 @@ Source: the supplied `0_Machine_Learning_Slides.pdf`, Evaluation & Generalizatio
 |---|---|---|
 | 1–6 | Evaluation basics | Squared loss; empirical and population risk; training optimism; population mismatch; dataset roles; generalization gap |
 | 7–12 | Bias & variance | Repeated training; pointwise bias; predictor variance; decomposition; degree and overfitting; irreducible noise |
-| 13–18 | Test-score uncertainty | Fixed-predictor evaluation; loss-based SE; test size; unbiased test risk; dependent observations; explicit population-risk calculation |
+| 13–18 | Test-score uncertainty | Fixed-predictor evaluation; loss-based SE; test size; evaluation precision versus predictor variance; dependent observations; explicit population-risk calculation |
 | 19–24 | Model selection | Parameters vs. hyperparameters; test reuse; weighted CV; preprocessing leakage; nested CV; refitting after assessment |
 
 Questions are self-contained and based on the Evaluation & Generalization chapter. All numerical assumptions are stated in the questions. Feedback provides explanations and conceptual reflections, with no dependency on external demonstrations, interface controls or plots. No precision/recall, kernel or regularization-specific questions are included.
 
 Bias and predictor variance are distinguished from sampling uncertainty of test MSE. Independent evaluation samples are distinguished from overlapping cross-validation folds.
+
+Feedback states the conditional-noise assumptions of the squared-error decomposition, the non-universal nature of complexity trends, and the dependence of CV scores. Nested CV assesses the selection-and-fitting procedure at the outer training size. CV selection plus an independent test set is also valid.
 
 ## Test locally
 
