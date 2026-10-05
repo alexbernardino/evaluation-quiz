@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {questions,sections,demo} from '../questions.js';
+import {createAnswers,choose,stats} from '../state.js';
+test('24 unique questions in four balanced sections',()=>{assert.equal(questions.length,24);assert.equal(new Set(questions.map(q=>q.id)).size,24);assert.equal(sections.length,4);for(const s of sections)assert.equal(questions.filter(q=>q.section===s).length,6);});
+test('each question has four distinct options, one valid answer and feedback',()=>{for(const q of questions){assert.equal(q.options.length,4);assert.equal(new Set(q.options).size,4);assert.ok(Number.isInteger(q.answer)&&q.answer>=0&&q.answer<4);assert.ok(q.prompt.length>20&&q.explanation.length>50&&q.activity.length>30);assert.ok(sections.includes(q.section));assert.ok(['Try it','Reflect'].includes(q.activityType));assert.ok(q.slides.length&&q.slides.every(s=>Number.isInteger(s)&&s>=113&&s<=144));}});
+test('correct answers are balanced across positions',()=>assert.deepEqual([0,1,2,3].map(a=>questions.filter(q=>q.answer===a).length),[6,6,6,6]));
+test('CV activities do not claim the demo implements CV',()=>{for(const id of ['weighted-cv','preprocessing','nested'])assert.equal(questions.find(q=>q.id===id).activityType,'Reflect');assert.equal(demo,'https://alexbernardino.github.io/evaluation-interactive/');});
+test('numeric answers match the stated calculations',()=>{const answer=id=>{const q=questions.find(q=>q.id===id);return q.options[q.answer];};assert.equal(Number(answer('loss')),(2-5)**2);assert.ok(Math.abs(Number(answer('decomposition'))-(.04+.09+.16))<1e-12);assert.equal(Number(answer('se-calculation')),.8/Math.sqrt(100));assert.equal(Number(answer('weighted-cv')),(10*2+30*6)/40);});
+test('a new attempt has no answers or points',()=>assert.deepEqual(stats(questions,createAnswers(questions)),{answered:0,correct:0,total:24,complete:false}));
+test('first answer locks without mutating the prior state',()=>{const old=createAnswers(questions),a=choose(questions,old,0,questions[0].answer);assert.equal(old[0],null);assert.equal(stats(questions,a).correct,1);assert.equal(choose(questions,a,0,(questions[0].answer+1)%4),a);});
+test('wrong answers count as answered but not correct',()=>{const a=choose(questions,createAnswers(questions),0,(questions[0].answer+1)%4);assert.equal(stats(questions,a).answered,1);assert.equal(stats(questions,a).correct,0);assert.equal(stats(questions,a).complete,false);});
+test('invalid selections are ignored',()=>{const a=createAnswers(questions);for(const [i,c] of [[-1,0],[24,0],[0,-1],[0,4],[0,NaN],[0,1.5]])assert.equal(choose(questions,a,i,c),a);});
+test('completion and restart scoring',()=>{let a=createAnswers(questions);questions.forEach((q,i)=>{a=choose(questions,a,i,q.answer);});assert.deepEqual(stats(questions,a),{answered:24,correct:24,total:24,complete:true});assert.equal(stats(questions,createAnswers(questions)).answered,0);});
